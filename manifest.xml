@@ -1,0 +1,18 @@
+<package>
+  <description brief="ros_aruco">
+
+    Using ARUCO in ROS
+
+    ARUCO can be downloaded there: http://www.uco.es/investiga/grupos/ava/node/26 
+
+  </description>
+  <author>Pierre Gergondet</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/ros_aruco</url>
+  <depend package="image_transport"/>
+  <depend package="roscpp"/>
+
+</package>
+
+
