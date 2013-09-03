@@ -3,9 +3,11 @@
 #include <image_transport/image_transport.h>
 #include <cv_bridge/cv_bridge.h>
 
+#include "ros_aruco/Markers.h"
+
 using namespace aruco;
 
-void imageCallback(ros::NodeHandle & nh, MarkerDetector & detector, CameraParameters & param, bool & feedback, const sensor_msgs::ImageConstPtr & img)
+void imageCallback(ros::NodeHandle & nh, ros::Publisher & pub, MarkerDetector & detector, CameraParameters & param, bool & feedback, const sensor_msgs::ImageConstPtr & img)
 {
     try
     {
@@ -32,15 +34,28 @@ void imageCallback(ros::NodeHandle & nh, MarkerDetector & detector, CameraParame
             }
         }
 
+
         detector.detect( cv_ptr->image, markers, param, marker_size );
+        ros_aruco::MarkersPtr msg(new ros_aruco::Markers);
+        msg->header = img->header;
+        msg->count = markers.size();
+        msg->T.resize(3*markers.size());
+        msg->R.resize(3*markers.size());
         for(unsigned int i = 0; i < markers.size(); ++i)
         {
+            msg->T[3*i] = markers[i].Tvec.at<float>(0,0);
+            msg->T[3*i+1] = markers[i].Tvec.at<float>(0,1);
+            msg->T[3*i+2] = markers[i].Tvec.at<float>(0,2);
+            msg->R[3*i] = markers[i].Rvec.at<float>(0,0);
+            msg->R[3*i+1] = markers[i].Rvec.at<float>(0,1);
+            msg->R[3*i+2] = markers[i].Rvec.at<float>(0,2);
             if(feedback)
             {
                 markers[i].draw(cv_ptr->image, cv::Scalar(0, 0, 255), 2);
                 CvDrawingUtils::draw3dCube(cv_ptr->image, markers[i], param);
             }
         }
+        pub.publish(msg);
 
         if(feedback)
         {
@@ -72,7 +87,8 @@ int main(int argc, char * argv[])
 
     /* Initialize image transport, use remapped image */
     image_transport::ImageTransport it(nh);
-    image_transport::Subscriber sub = it.subscribe("image", 1, boost::bind(&imageCallback, boost::ref(nh), boost::ref(MDetector), boost::ref(CamParam),boost::ref(feedback), _1));
+    ros::Publisher pub = nh.advertise<ros_aruco::Markers>("ros_aruco/markers", 10);
+    image_transport::Subscriber sub = it.subscribe("image", 1, boost::bind(&imageCallback, boost::ref(nh), boost::ref(pub), boost::ref(MDetector), boost::ref(CamParam),boost::ref(feedback), _1));
 
     /* An OpenCV window for feedback */
     if(feedback)
