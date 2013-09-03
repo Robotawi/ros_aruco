@@ -1,0 +1,23 @@
+%YAML:1.0
+image_width: 640
+image_height: 480
+# camera_name: narrow_stereo/left
+camera_matrix: !!opencv-matrix
+  rows: 3
+  cols: 3
+  dt: d
+  data: [538.047049, 0, 319.509874, 0, 538.226039, 239.332725, 0, 0, 1]
+distortion_model: plumb_bob
+distortion_coefficients: !!opencv-matrix
+  rows: 5
+  cols: 1
+  dt: d
+  data: [0.031828, -0.106567, -0.001167, 0.002602, 0]
+rectification_matrix: 
+  rows: 3
+  cols: 3
+  data: [1, 0, 0, 0, 1, 0, 0, 0, 1]
+projection_matrix: 
+  rows: 3
+  cols: 4
+  data: [536.036316, 0, 320.532458, 0, 0, 538.503784, 238.442069, 0, 0, 0, 1, 0]
