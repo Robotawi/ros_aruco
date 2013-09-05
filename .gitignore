@@ -1,5 +1,4 @@
 *.swp
-Makefile
 bin
 msg_gen
 src/ros_aruco
