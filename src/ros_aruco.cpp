@@ -39,16 +39,22 @@ void imageCallback(ros::NodeHandle & nh, ros::Publisher & pub, MarkerDetector & 
         ros_aruco::MarkersPtr msg(new ros_aruco::Markers);
         msg->header = img->header;
         msg->count = markers.size();
+        msg->ids.resize(markers.size());
         msg->T.resize(3*markers.size());
         msg->R.resize(3*markers.size());
+        msg->px.resize(2*markers.size());
         for(unsigned int i = 0; i < markers.size(); ++i)
         {
+            msg->ids[i] = markers[i].id;
             msg->T[3*i] = markers[i].Tvec.at<float>(0,0);
             msg->T[3*i+1] = markers[i].Tvec.at<float>(0,1);
             msg->T[3*i+2] = markers[i].Tvec.at<float>(0,2);
             msg->R[3*i] = markers[i].Rvec.at<float>(0,0);
             msg->R[3*i+1] = markers[i].Rvec.at<float>(0,1);
             msg->R[3*i+2] = markers[i].Rvec.at<float>(0,2);
+            cv::Point2f center = markers[i].getCenter();
+            msg->px[2*i] = center.x;
+            msg->px[2*i+1] = center.y;
             if(feedback)
             {
                 markers[i].draw(cv_ptr->image, cv::Scalar(0, 0, 255), 2);
@@ -59,6 +65,10 @@ void imageCallback(ros::NodeHandle & nh, ros::Publisher & pub, MarkerDetector & 
 
         if(feedback)
         {
+            if(img->encoding == "rgb8")
+            {
+                cv::cvtColor(cv_ptr->image, cv_ptr->image, CV_RGB2BGR);
+            }
             cv::imshow("ros_aruco", cv_ptr->image);
         }
     }

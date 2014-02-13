@@ -17,6 +17,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 set(CMAKE_MODULE_PATH /usr/lib/cmake)
+set(CMAKE_MODULE_PATH ${CMAKE_INSTALL_PREFIX}/lib/cmake)
 find_package(aruco REQUIRED)
 
 #uncomment if you have defined messages
@@ -32,5 +33,6 @@ rosbuild_genmsg()
 #rosbuild_add_executable(example examples/example.cpp)
 #target_link_libraries(example ${PROJECT_NAME})
 
+include_directories(${CMAKE_INSTALL_PREFIX}/include)
 rosbuild_add_executable(ros_aruco src/ros_aruco.cpp)
 target_link_libraries(ros_aruco ${aruco_LIBS})

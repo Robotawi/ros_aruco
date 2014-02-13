@@ -1,5 +1,5 @@
 <launch>
-    <arg name="image" default="/camera/rgb/image_color" />
+    <arg name="image" default="/camera/rgb/image_raw" />
     <arg name="camparam" default="$(find ros_aruco)/data/camparam.yml" />
     <arg name="markersize" default="0.04" />
     <arg name="feedback" default="1" />
