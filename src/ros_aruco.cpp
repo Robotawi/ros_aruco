@@ -16,16 +16,16 @@ void imageCallback(ros::NodeHandle & nh, ros::Publisher & pub, MarkerDetector & 
         cv_bridge::CvImagePtr cv_ptr = cv_bridge::toCvCopy(img, img->encoding);
         if(param.CamSize != cv_ptr->image.size()) { param.resize(cv_ptr->image.size()); }
         double marker_size = 0.04;
-        nh.getParam("ros_aruco/markersize", marker_size);
+        nh.getParam(ros::this_node::getName() + "/markersize", marker_size);
 
         bool rfeedback = true;
-        nh.getParam("ros_aruco/feedback", rfeedback);
+        nh.getParam(ros::this_node::getName() + "/feedback", rfeedback);
         if(feedback != rfeedback)
         {
             feedback = rfeedback;
             if(feedback)
             {
-                cvNamedWindow("ros_aruco");
+                cvNamedWindow(ros::this_node::getName().c_str());
                 cvStartWindowThread();   
             }
             else
@@ -69,7 +69,7 @@ void imageCallback(ros::NodeHandle & nh, ros::Publisher & pub, MarkerDetector & 
             {
                 cv::cvtColor(cv_ptr->image, cv_ptr->image, CV_RGB2BGR);
             }
-            cv::imshow("ros_aruco", cv_ptr->image);
+            cv::imshow(ros::this_node::getName(), cv_ptr->image);
         }
     }
     catch (cv_bridge::Exception & e)
@@ -80,15 +80,15 @@ void imageCallback(ros::NodeHandle & nh, ros::Publisher & pub, MarkerDetector & 
 
 int main(int argc, char * argv[])
 {
-    ros::init(argc, argv, "ros_aruco");
+    ros::init(argc, argv, ros::this_node::getName());
 
     ros::NodeHandle nh;
     
     std::string camparam;
-    nh.getParam("ros_aruco/camparam", camparam);
+    nh.getParam(ros::this_node::getName() + "/camparam", camparam);
 
     bool feedback = true;
-    nh.getParam("ros_aruco/feedback", feedback);
+    nh.getParam(ros::this_node::getName() + "/feedback", feedback);
 
     /* Initialize aruco tracker */
     CameraParameters CamParam;
@@ -97,13 +97,13 @@ int main(int argc, char * argv[])
 
     /* Initialize image transport, use remapped image */
     image_transport::ImageTransport it(nh);
-    ros::Publisher pub = nh.advertise<ros_aruco::Markers>("ros_aruco/markers", 10);
+    ros::Publisher pub = nh.advertise<ros_aruco::Markers>(ros::this_node::getName() + "/markers", 10);
     image_transport::Subscriber sub = it.subscribe("image", 1, boost::bind(&imageCallback, boost::ref(nh), boost::ref(pub), boost::ref(MDetector), boost::ref(CamParam),boost::ref(feedback), _1));
 
     /* An OpenCV window for feedback */
     if(feedback)
     {
-        cvNamedWindow("ros_aruco");
+        cvNamedWindow(ros::this_node::getName().c_str());
         cvStartWindowThread();   
     }
 
