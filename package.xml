@@ -1,0 +1,27 @@
+<package>
+  <name>ros_aruco</name>
+  <description>
+    Using ARUCO in ROS
+
+    ARUCO can be downloaded there: http://www.uco.es/investiga/grupos/ava/node/26 
+  </description>
+  <author email="pierre.gergondet+github@gmail.com">Pierre Gergondet</author>
+  <maintainer email="pierre.gergondet+github@gmail.com">Pierre Gergondet</maintainer>
+  <license>BSD</license>
+  <version>0.1.0</version>
+  <url>http://ros.org/wiki/ros_aruco</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>roscpp</build_depend>
+  <build_depend>message_generation</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>image_transport</build_depend>
+  <build_depend>cv_bridge</build_depend>
+
+  <run_depend>roscpp</run_depend>
+  <run_depend>message_runtime</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>image_transport</run_depend>
+  <run_depend>cv_bridge</run_depend>
+</package>
