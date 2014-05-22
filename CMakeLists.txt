@@ -19,6 +19,7 @@ generate_messages(DEPENDENCIES std_msgs)
 catkin_package()
 
 add_executable(ros_aruco src/ros_aruco.cpp)
+add_dependencies(ros_aruco ros_aruco_generate_messages_cpp)
 target_link_libraries(ros_aruco ${aruco_LIBS} ${catkin_LIBRARIES})
 
 install(DIRECTORY include/${PROJECT_NAME}/
