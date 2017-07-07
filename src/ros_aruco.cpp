@@ -12,6 +12,8 @@ void imageCallback(ros::NodeHandle & nh, ros::Publisher & pub, MarkerDetector & 
     try
     {
         /* Get the image and setup the detector */
+        //This is an empty vector of markers. 
+        //like an array but can grow dynamically.
         std::vector<Marker> markers;
         cv_bridge::CvImagePtr cv_ptr = cv_bridge::toCvCopy(img, img->encoding);
         if(param.CamSize != cv_ptr->image.size()) { param.resize(cv_ptr->image.size()); }
